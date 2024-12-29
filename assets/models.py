@@ -1,5 +1,3 @@
-from _pydatetime import datetime
-
 from auditlog.models import AuditlogHistoryField
 from django.conf import settings
 from django.core.exceptions import ValidationError

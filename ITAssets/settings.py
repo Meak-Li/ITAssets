@@ -9,12 +9,14 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 PUBLIC_URL = os.getenv("PUBLIC_URL", default="http://localhost:8020")
 
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-x+-vn!r86l&^cta5)rdo^ewo!r!*mglo_=e3b19_a-$t&5q-=*")
 
 # 安全警告：不要在生产环境中打开调试的情况下运行！
-DEBUG = True if 'True' == os.getenv("DEBUG") else False  # 是否开启调试模式
+DEBUG = True if 'True' == os.getenv("DEBUG", True) else False  # 是否开启调试模式
+# DEBUG = True  # 是否开启调试模式
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(',')  # 允许访问的主机
+# ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(',')  # 允许访问的主机
+ALLOWED_HOSTS = ["*"]  # 允许访问的主机
 
 INSTALLED_APPS = [
     "simpleui",  # 使用simpleui
@@ -64,17 +66,24 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "ITAssets.wsgi.application"
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': os.getenv("DATABASE_ENGINE"),
+#         'NAME': os.getenv("DATABASE_NAME"),
+#         'USER': os.getenv("DATABASE_USER"),
+#         'PASSWORD': os.getenv("DATABASE_PASSWORD"),
+#         'HOST': os.getenv("DATABASE_HOST"),
+#         'PORT': os.getenv("DATABASE_PORT"),
+#         'OPTIONS': {
+#             'charset': 'utf8mb4',  # 设置字符集, 要确保数据库支持并设置为utf8mb4
+#         },
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': os.getenv("DATABASE_ENGINE"),
-        'NAME': os.getenv("DATABASE_NAME"),
-        'USER': os.getenv("DATABASE_USER"),
-        'PASSWORD': os.getenv("DATABASE_PASSWORD"),
-        'HOST': os.getenv("DATABASE_HOST"),
-        'PORT': os.getenv("DATABASE_PORT"),
-        'OPTIONS': {
-            'charset': 'utf8mb4',  # 设置字符集, 要确保数据库支持并设置为utf8mb4
-        },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -93,10 +102,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # 解决django 跨域问题
 CORS_ALLOW_CREDENTIALS = True if 'True' == os.getenv("CORS_ALLOW_CREDENTIALS") else False  # 允许携带cookie
 SECURE_CROSS_ORIGIN_OPENER_POLICY = os.getenv("SECURE_CROSS_ORIGIN_OPENER_POLICY")  # 设置跨域策略
-CSRF_TRUSTED_ORIGINS = [os.getenv("PUBLIC_URL")]  # 允许跨域的域名
+# CSRF_TRUSTED_ORIGINS = ["*"]  # 允许跨域的域名
 
 # 设置会话过期时间
-SESSION_EXPIRE_SECONDS = int(os.getenv("SESSION_EXPIRE_SECONDS"))  # 7天
+SESSION_EXPIRE_SECONDS = int(os.getenv("SESSION_EXPIRE_SECONDS", 2343434534))  # 7天
 SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True if 'True' == os.getenv(
     "SESSION_EXPIRE_AFTER_LAST_ACTIVITY") else False  # 会话过期时间是否从最后一次活动开始计算
 SESSION_TiMEOUT_REDIRECT_URL = '/login/'  # 会话过期后跳转的URL
@@ -109,11 +118,18 @@ USE_I18N = True
 
 USE_TZ = False
 
-STATIC_URL = os.getenv("STATIC_URL", "/static/")
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+# STATIC_URL = os.getenv("STATIC_URL", "/static/")
+STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
+
+
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'assets', 'static'),
+# ]
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "assets/static"),
+    os.path.join(BASE_DIR, 'assets', 'static'),  # 确保指向正确的静态文件目录
+    # 如果您使用 SimpleUI 或其他库，也确保其静态文件夹在此配置中
 ]
 
 MEDIA_URL = os.getenv("MEDIA_URL", "/media/")
